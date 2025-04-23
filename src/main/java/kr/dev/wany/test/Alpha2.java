@@ -1,9 +1,9 @@
 package kr.dev.wany.test;
 
 /************************************
- * Name : alpha_1
+ * Name : Alpha2
  * To-Do : 
  * Developer : twkim
- * Date : 2025-04-23 오후 3:12
+ * Date : 2025-04-23 오후 3:30
  ************************************/
-public class alpha_1 {}
+public class Alpha2 {}
