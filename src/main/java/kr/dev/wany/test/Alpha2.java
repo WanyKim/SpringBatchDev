@@ -8,6 +8,6 @@ package kr.dev.wany.test;
  ************************************/
 public class Alpha2 {
     /**
-     * test
+     * test2
      */
 }
