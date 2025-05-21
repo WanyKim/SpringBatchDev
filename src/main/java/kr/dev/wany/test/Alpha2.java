@@ -6,4 +6,8 @@ package kr.dev.wany.test;
  * Developer : twkim
  * Date : 2025-04-23 오후 3:30
  ************************************/
-public class Alpha2 {}
+public class Alpha2 {
+    /**
+     * test
+     */
+}
