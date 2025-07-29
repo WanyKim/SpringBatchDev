@@ -1,5 +1,7 @@
 package kr.dev.wany.BatchDev.batchTest.step_3.bootBatch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -27,6 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Configuration
 public class SystemTerminationConfig
 {
+    private static final Logger logloc = LoggerFactory.getLogger( SystemTerminationConfig.class );
+    
     private AtomicInteger processKilled = new AtomicInteger(0);
     private final int TERMINATION_TARGET = 5;
 
@@ -38,13 +42,22 @@ public class SystemTerminationConfig
         this.transactionManager = transactionManager;
     }
 
-    @Bean("firstJob")
-    public Job firstJob()
-    {
-        return new JobBuilder( "myFirstJob", jobRepository )
+    @Bean("systemTerminationSimulationJob")
+    public Job systemTerminationSimulationJob() {
+
+        /*********************************
+         * 정의된 Step 들은 이전 Step이 성공적으로 완료된 이후 실행됨.
+         * 즉, enterWorldStep 이 완료되어야 meetNPCStep 이 실행됨.
+         * 만약 이전 Step이 실패하면 다음 Step은 실행되지 않음.
+         *********************************/
+        return new JobBuilder( "systemTerminationSimulationJob", jobRepository )
                 .start( enterWorldStep() )
+                .next( meetNPCStep() )
+                .next( defeatProcessStep() )
+                .next( completeQuestStep() )
                 .build();
     }
+
 
     @Bean
     public Step enterWorldStep() {
@@ -63,42 +76,6 @@ public class SystemTerminationConfig
                 }, transactionManager )
                 .build();
     }
-
-
-    @Bean
-    public Job systemTerminationSimulationJob() {
-
-        /*********************************
-         * 정의된 Step 들은 이전 Step이 성공적으로 완료된 이후 실행됨.
-         * 즉, enterWorldStep 이 완료되어야 meetNPCStep 이 실행됨.
-         * 만약 이전 Step이 실패하면 다음 Step은 실행되지 않음.
-         *********************************/
-        return new JobBuilder( "systemTerminationSimulationJob", jobRepository )
-                .start( enterWorldStep() )
-//                .next( meetNPCStep() )
-//                .next( defeatProcessStep() )
-//                .next( completeQuestStep() )
-                .build();
-    }
-
-//
-//    @Bean
-//    public Step enterWorldStep() {
-//        /*********************************
-//         * StepBuilder로 Step을 생성.
-//         * 첫번째 파라미터로 Step 식별자를 지정하며, Job 과 Step의 상태를 추적 및 제어할 때 사용됨.
-//         *
-//         * Step의 실제 동작은 tasklet() 메서드를 통해서 정의됨.
-//         * BatchConfig 으로 부터 주입받은 'PlatformTransactionManager' 가 이 지점에서 사용된다.
-//         *********************************/
-//
-//        return new StepBuilder( "enterWorldStep", jobRepository )
-//                .tasklet( (contribution, chunkContext) -> {
-//                    System.out.println( "Access System Termination" );
-//                    return RepeatStatus.FINISHED;
-//                }, transactionManager )
-//                .build();
-//    }
 
 
     @Bean
