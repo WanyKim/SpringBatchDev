@@ -1,0 +1,21 @@
+spring:
+  main:
+    web-application-type: none # 웹서버 구동없이 배치만 실행
+  datasource:
+    url: jdbc:h2:mem:default_batch_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE # H2 인메모리 DB URL
+    # jdbc:h2:mem: : 인메모리 모드 (앱 종료 시 데이터 휘발)
+    # default_batch_db : 데이터베이스 이름 (원하는 이름으로 지정)
+    # DB_CLOSE_DELAY=-1 : 마지막 연결이 끊어져도 DB가 바로 닫히지 않고 계속 유지 (디버깅/개발에 유용)
+    # DB_CLOSE_ON_EXIT=FALSE : JVM 종료 시 DB가 닫히지 않음 (일반적으로는 true나 생략하지만, 특정 테스트/디버깅 상황에 유용)
+    driverClassName: org.h2.Driver # H2 JDBC 드라이버 클래스
+    username: sa # H2 기본 사용자 이름 (개발용)
+    password: # H2 기본 비밀번호 (개발용)
+    # hikari: # HikariCP 연결 풀 설정 (선택 사항, 기본값도 좋음)
+    #   maximum-pool-size: 10
+    #   minimum-idle: 2
+    #   connection-timeout: 30000
+  batch:
+    jdbc:
+      initialize-schema: always  # Spring Batch 메타데이터 테이블 초기화(개발용)
+    job: # <--- 이 부분!!
+      names: firstJob # <--- job의 빈 이름 (SystemTerminationConfig.java의 @Bean("firstJob")과 일치)
