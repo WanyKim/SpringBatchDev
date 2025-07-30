@@ -8,5 +8,9 @@
 ### 2. /section_5/taskletProc/ZombieBatchConfig
 - Program Argument : --spring.batch.job.names=zombieCleanJob  
 
-### 3. /section_6/Step6Config
-- Program Argument : --spring.batch.job.names=processSection6 terminatorId=KILL-9,java.lang.String targetCount=5,java.lang.Integer,false  
+### 3. /section_6
+- /Step6ParamConfig   
+-- Program Argument : --spring.batch.job.names=processSection6 terminatorId=KILL-9,java.lang.String targetCount=5,java.lang.Integer,false
+  
+- /Step6ParamDateConfig  
+-- Program Argument : --spring.batch.job.names=
