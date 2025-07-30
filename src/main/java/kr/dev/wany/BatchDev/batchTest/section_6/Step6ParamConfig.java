@@ -18,17 +18,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /************************************
- * Name : Step6Config
+ * Name : Step6ParamConfig
  * To-Do : 
  * Developer : twkim
  * Date : 2025-07-30 오후 2:37
  ************************************/
 @Configuration
-@EnableBatchProcessing
 @RequiredArgsConstructor
-public class Step6Config
+public class Step6ParamConfig
 {
-    private static final Logger logloc = LoggerFactory.getLogger( Step6Config.class );
+    private static final Logger logloc = LoggerFactory.getLogger( Step6ParamConfig.class );
 
     @Bean
     public Job processSection6(JobRepository jobRepository, Step terminationStep) {
@@ -45,6 +44,12 @@ public class Step6Config
     }
 
 
+    /**
+     * @StepScope : @Value 를 사용해 Job parameter를 전달받기 위해 선언
+     * @param terminatorId
+     * @param targetCount
+     * @return
+     */
     @Bean
     @StepScope
     public Tasklet terminationTasklet(
