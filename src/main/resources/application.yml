@@ -2,19 +2,15 @@ spring:
   main:
     web-application-type: none # 웹서버 구동없이 배치만 실행 (유지)
   datasource:
-    url: jdbc:h2:tcp://localhost:9092/default_batch_db # /default_batch_db는 H2 서버가 -baseDir로 지정된 경로 안에서 관리할 데이터베이스 파일의 이름이 됩니다. 즉, C:\h2_data\default_batch_db.mv.db 와 같이 파일이 생성
-    driverClassName: org.h2.Driver # H2 JDBC 드라이버 클래스
-    username: sa # H2 기본 사용자 이름 (개발용)
-    password: # H2 기본 비밀번호 (개발용)
-    # hikari: # HikariCP 연결 풀 설정 (선택 사항, 기본값도 좋음)
-    #   maximum-pool-size: 10
-    #   minimum-idle: 2
-    #   connection-timeout: 30000
+    url: jdbc:mysql://localhost:3306/twkim_database?useSSL=false&serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ktw7230!@#
   batch:
     jdbc:
-      initialize-schema: always  # Spring Batch 메타데이터 테이블 초기화(개발용)
+      initialize-schema: never  # 최초 실행 시 Spring Batch 메타데이터 테이블 자동 생성
 logging:
   level:
     org.springframework.jdbc: INFO # JDBC 관련 모든 로그
     org.springframework.batch: INFO # Spring Batch 관련 모든 로그
-    org.h2: INFO # H2 데이터베이스 자체 로그
+    com.zaxxer.hikari: INFO # Connection pool 로그

@@ -42,6 +42,19 @@ public class SystemTerminationConfig
         this.transactionManager = transactionManager;
     }
 
+    @Bean("firstJob")
+    public Job firstJob() {
+
+        /*********************************
+         * 정의된 Step 들은 이전 Step이 성공적으로 완료된 이후 실행됨.
+         * 즉, enterWorldStep 이 완료되어야 meetNPCStep 이 실행됨.
+         * 만약 이전 Step이 실패하면 다음 Step은 실행되지 않음.
+         *********************************/
+        return new JobBuilder( "firstJob", jobRepository )
+                .start( enterWorldStep() )
+                .build();
+    }
+
     @Bean("systemTerminationSimulationJob")
     public Job systemTerminationSimulationJob() {
 
@@ -68,10 +81,9 @@ public class SystemTerminationConfig
          * Step의 실제 동작은 tasklet() 메서드를 통해서 정의됨.
          * BatchConfig 으로 부터 주입받은 'PlatformTransactionManager' 가 이 지점에서 사용된다.
          *********************************/
-
         return new StepBuilder( "enterWorldStep", jobRepository )
                 .tasklet( (contribution, chunkContext) -> {
-                    System.out.println( "Access System Termination" );
+                    logloc.info( "Access System Termination" );
                     return RepeatStatus.FINISHED;
                 }, transactionManager )
                 .build();
@@ -82,8 +94,9 @@ public class SystemTerminationConfig
     public Step meetNPCStep() {
         return new StepBuilder( "meetNPCStep", jobRepository )
                 .tasklet( (contribution, chunkContext) -> {
-                    System.out.println( "Meet NPC ( Administrator of System )" );
-                    System.out.println( "First mission: kill " + TERMINATION_TARGET + " zombie!" );
+                    logloc.info( "Meet NPC ( Administrator of System )" );
+                    logloc.info( "First mission: kill {}} zombie!", TERMINATION_TARGET );
+
                     return RepeatStatus.FINISHED;
                 }, transactionManager )
                 .build();
@@ -95,7 +108,7 @@ public class SystemTerminationConfig
                 .tasklet( (contribution, chunkContext) -> {
                     int terminated = processKilled.incrementAndGet();
 
-                    System.out.println( "Complete kill zombies (Curr " + terminated + "/" + TERMINATION_TARGET );
+                    logloc.info( "Complete kill zombies (Curr {}/{})", terminated, TERMINATION_TARGET );
 
                     if( terminated < TERMINATION_TARGET ) {
                         return RepeatStatus.CONTINUABLE;
@@ -112,8 +125,8 @@ public class SystemTerminationConfig
     public Step completeQuestStep() {
         return new StepBuilder( "completeQuestStep", jobRepository )
                 .tasklet( (contribution, chunkContext) -> {
-                    System.out.println( "Mission complete! kill zombie " + TERMINATION_TARGET );
-                    System.out.println( "Reward: kill -9 권한 획득." );
+                    logloc.info( "Mission complete! kill zombie {}", TERMINATION_TARGET );
+                    logloc.info( "Reward: kill -9 권한 획득." );
                     return RepeatStatus.FINISHED;
                 }, transactionManager)
                 .build();
