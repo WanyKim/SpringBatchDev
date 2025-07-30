@@ -1,4 +1,4 @@
-package kr.dev.wany.BatchDev.batchTest.step_3.bootBatch;
+package kr.dev.wany.BatchDev.batchTest.section_3.bootBatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
