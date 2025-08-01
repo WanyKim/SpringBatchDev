@@ -9,8 +9,8 @@ spring:
   batch:
     jdbc:
       initialize-schema: never  # 최초 실행 시 Spring Batch 메타데이터 테이블 자동 생성
-    job:
-      names: NONE  # Program Argument가 없으면 어떤 Job도 실행하지 않음
+#    job:
+#      names: NONE  # Program Argument가 없으면 어떤 Job도 실행하지 않음
 logging:
   level:
     org.springframework.jdbc: INFO # JDBC 관련 모든 로그
