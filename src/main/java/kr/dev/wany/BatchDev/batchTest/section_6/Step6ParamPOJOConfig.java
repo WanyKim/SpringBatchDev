@@ -1,12 +1,11 @@
 package kr.dev.wany.BatchDev.batchTest.section_6;
 
 import kr.dev.wany.BatchDev.batchTest.section_6.info.Step6ParamPOJO;
-import kr.dev.wany.BatchDev.batchTest.section_6.info.step6ParamPOJO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -27,7 +26,12 @@ public class Step6ParamPOJOConfig
     private static final Logger logloc = LoggerFactory.getLogger( Step6ParamPOJOConfig.class );
 
     @Bean
-    public Job step6ParamPOJOJob( JobRepository job)
+    public Job step6ParamPOJOJob(JobRepository jobRepository, Step step6ParamPOJOStep )
+    {
+        return new JobBuilder( "step6ParamPOJOJob", jobRepository )
+                .start( step6ParamPOJOStep )
+                .build();
+    }
 
 
     @Bean
